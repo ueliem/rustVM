@@ -24,5 +24,5 @@ fn main() {
     //End Program
     ];
 
-    vm::execute_vm(true, instr_list, const_list);
+    vm::execute_vm(true, instr_list, const_list, []);
 }

@@ -3,7 +3,34 @@ enum StackItem<u16, String> {
     StackString(String)
 }
 
-pub fn execute_vm(strict: bool, bytecodes: &[Bytecode], constant_pool: &[Constant<u16>]) {
+pub enum Constant<u16> {
+    IntConstant(u16)
+}
+
+pub enum Variable<u16> {
+    IntVariable(u16)
+}
+
+pub struct Bytecode {
+    pub opcode: Opcode,
+    pub firstbyte: Option<u8>,
+    pub secondbyte: Option<u8>
+}
+
+pub enum Opcode {
+  Nop = 0x00,
+  ISum = 0x01,
+  ISub = 0x02,
+  IReturn = 0x03,
+  ILoadConst = 0x04,
+  Goto = 0x05,
+  Call = 0x06,
+  Print = 0x07,
+  IStore = 0x08,
+  ILoad = 0x09
+}
+
+pub fn execute_vm(strict: bool, bytecodes: &[Bytecode], constant_pool: &[Constant<u16>], variables: &mut [Variable<u16>]) {
     let mut stack: Vec<StackItem<u16, String>> = Vec::new();
     let mut frame_pointers: Vec<uint> = Vec::new();
     let mut instruction_pointer = 0;
@@ -92,30 +119,22 @@ pub fn execute_vm(strict: bool, bytecodes: &[Bytecode], constant_pool: &[Constan
                     },
                     _ => fail!()
                 }
+            },
+            IStore => {
+                match stack.pop() {
+                    Some(StackInteger(tos)) => {
+                        variables[((bytecodes[instruction_pointer].firstbyte.unwrap() << 8) as uint) + (bytecodes[instruction_pointer].secondbyte.unwrap() as uint)] = IntVariable(tos);
+                    },
+                    _ => fail!()
+                }
+            },
+            ILoad => {
+                match variables[((bytecodes[instruction_pointer].firstbyte.unwrap() << 8) as uint) + (bytecodes[instruction_pointer].secondbyte.unwrap() as uint)] {
+                    IntVariable(n) => stack.push(StackInteger(n))
+                }
             }
         }
         // println!("{}, {}", instruction_pointer, bytecodes.len());
     }
     // println!("Done");
-}
-
-pub struct Bytecode {
-    pub opcode: Opcode,
-    pub firstbyte: Option<u8>,
-    pub secondbyte: Option<u8>
-}
-
-pub enum Opcode {
-  Nop = 0x00,
-  ISum = 0x01,
-  ISub = 0x02,
-  IReturn = 0x03,
-  ILoadConst = 0x04,
-  Goto = 0x05,
-  Call = 0x06,
-  Print = 0x07
-}
-
-pub enum Constant<u16> {
-    IntConstant(u16)
 }
