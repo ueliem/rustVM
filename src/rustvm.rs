@@ -1,7 +1,7 @@
 #![crate_id = "rustvm"]
 use std::io::BufferedReader;
 use std::io;
-mod vm;
+pub mod vm;
 
 /*fn main() {
     let const_list: &[vm::Constant<u16>] = [vm::IntConstant(1_u16), vm::IntConstant(2_u16), vm::IntConstant(3_u16)];
