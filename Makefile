@@ -1,6 +1,6 @@
 build:
 	mkdir -p build
-	rustc src/main.rs -o build/rustVM
+	rustc src/rustvm.rs --out-dir=build/ --crate-type=lib
 clean:
 	rm -rf build/*
 	rmdir build/

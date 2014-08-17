@@ -1,8 +1,9 @@
+#![crate_id = "rustvm"]
 use std::io::BufferedReader;
 use std::io;
 mod vm;
 
-fn main() {
+/*fn main() {
     let const_list: &[vm::Constant<u16>] = [vm::IntConstant(1_u16), vm::IntConstant(2_u16), vm::IntConstant(3_u16)];
 
     let instr_list: &[vm::Bytecode] = [
@@ -25,4 +26,5 @@ fn main() {
     ];
 
     vm::execute_vm(true, instr_list, const_list, []);
-}
+}*/
+
